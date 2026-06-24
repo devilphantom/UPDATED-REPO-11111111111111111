@@ -327,7 +327,7 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 🎭 Genres: {genres}
 📆 Year: <a href={url}/releaseinfo>{year}</a>
 🌟 Rating: <a href={url}/ratings> ({rating}/10 )</a>
-ᴀᴜᴅɪᴏ : {languages}
+🎶ᴀᴜᴅɪᴏ : {languages}
 
 sʜᴏᴡɴ ɪɴ : {remaining_seconds} <i>sᴇᴄ</i>⚡️
 <b>ʀᴇǫ ʙʏ : {message.from_user.mention}</b>"""
