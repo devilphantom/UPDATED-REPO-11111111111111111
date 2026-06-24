@@ -324,8 +324,9 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 
     IMDB_TEMPLATE_TXT = """<b><a href={url}>{title} (<a href={url}/releaseinfo>{year}</a>)
 
-ʀᴀᴛɪɴɢ : <a href={url}/ratings>{rating}</a>
-ɢᴇɴʀᴇ : {genres}
+🎭 Genres: {genres}
+📆 Year: <a href={url}/releaseinfo>{year}</a>
+🌟 Rating: <a href={url}/ratings> ({rating}/10 )</a>
 ᴀᴜᴅɪᴏ : {languages}
 
 sʜᴏᴡɴ ɪɴ : {remaining_seconds} <i>sᴇᴄ</i>⚡️
@@ -354,11 +355,9 @@ sʜᴏᴡɴ ɪɴ : {remaining_seconds} <i>sᴇᴄ</i>⚡️
     PREMIUM_TEXT = """<blockquote>🎖️ <b>ᴀᴠᴀɪʟᴀʙʟᴇ ᴘʟᴀɴs</b></blockquote>
 
 
-◉ 07 ᴅᴀʏꜱ - 10 ₹  / 10 ꜱᴛᴀʀ
-◉ 15 ᴅᴀʏꜱ - 20 ₹  / 20 ꜱᴛᴀʀ
-◉ 30 ᴅᴀʏꜱ - 40 ₹  / 40 ꜱᴛᴀʀ
-◉ 45 ᴅᴀʏꜱ - 55 ₹  / 55 ꜱᴛᴀʀ
-◉ 60 ᴅᴀʏꜱ - 75 ₹  / 75 ꜱᴛᴀʀ
+
+◉ 15 ᴅᴀʏꜱ - 20 ₹ 
+◉ 30 ᴅᴀʏꜱ - 40 ₹ 
 
 •─────•─────────•─────•
 
