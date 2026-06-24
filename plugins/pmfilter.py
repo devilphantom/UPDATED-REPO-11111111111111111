@@ -1,4 +1,4 @@
-from utils import get_size, is_subscribed, is_req_subscribed, group_setting_buttons, get_poster, get_posterx, temp, get_settings, save_group_settings, get_cap, imdb, is_check_admin, extract_request_content, log_error, clean_filename, generate_season_variations, clean_search_text
+from utils import get_random_mix_id, get_size, is_subscribed, is_req_subscribed, group_setting_buttons, get_poster, get_posterx, temp, get_settings, save_group_settings, get_cap, imdb, is_check_admin, extract_request_content, log_error, clean_filename, generate_season_variations, clean_search_text
 import tracemalloc
 from fuzzywuzzy import process
 from dreamxbotz.util.file_properties import get_name, get_hash
@@ -6,7 +6,7 @@ from urllib.parse import quote_plus
 import logging
 from database.ia_filterdb import Media, Media2, get_file_details, get_search_results, get_bad_files
 from database.config_db import mdb
-from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid, ChatAdminRequired, UserNotParticipant
+from pyrogram.errors import MessageIdInvalid, UserIsBlocked, MessageNotModified, PeerIdInvalid
 from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto, WebAppInfo
 from info import *
@@ -38,13 +38,14 @@ BUTTONS2 = {}
 SPELL_CHECK = {}
 
 
-@Client.on_message(filters.group & filters.text & filters.incoming)
+@Client.on_message(filters.group & filters.text & filters.incoming & ~filters.regex(r"^/") )
 async def give_filter(client, message):
     if EMOJI_MODE:
         try:
             await message.react(emoji=random.choice(REACTIONS), big=True)
         except Exception:
-            await message.react(emoji="⚡️", big=True)
+            await message.react(emoji="⚡️")
+            pass
     await mdb.update_top_messages(message.from_user.id, message.text)
     if message.chat.id != SUPPORT_CHAT_ID:
         settings = await get_settings(message.chat.id)
@@ -56,6 +57,12 @@ async def give_filter(client, message):
                     return await message.delete()
                 await auto_filter(client, message)
         except KeyError:
+            await save_group_settings(message.chat.id, 'auto_ffilter', True)
+            settings = await get_settings(message.chat.id)
+            if settings['auto_ffilter']:
+                await auto_filter(client, message) 
+        except Exception as e:
+            logger.exception("Error in auto filter: %s", e)
             pass
     else:
         search = message.text
@@ -63,18 +70,13 @@ async def give_filter(client, message):
         if total_results == 0:
             return
         await message.reply_text(
-            f"<b>Hᴇʏ {message.from_user.mention},\n\n"
-            f"ʏᴏᴜʀ ʀᴇǫᴜᴇꜱᴛ ɪꜱ ᴀʟʀᴇᴀᴅʏ ᴀᴠᴀɪʟᴀʙʟᴇ ✅\n\n"
-            f"📂 ꜰɪʟᴇꜱ ꜰᴏᴜɴᴅ : {str(total_results)}\n"
-            f"🔍 ꜱᴇᴀʀᴄʜ :</b> <code>{search}</code>\n\n"
-            f"<b>‼️ ᴛʜɪs ɪs ᴀ <u>sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ</u> sᴏ ᴛʜᴀᴛ ʏᴏᴜ ᴄᴀɴ'ᴛ ɢᴇᴛ ғɪʟᴇs ғʀᴏᴍ ʜᴇʀᴇ...\n\n"
-            f"📝 ꜱᴇᴀʀᴄʜ ʜᴇʀᴇ : 👇</b>",
+            script.ALREADY_AVAILABLE_TXT.format(message.from_user.mention, total_results, search),
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("🔍 ᴊᴏɪɴ ᴀɴᴅ ꜱᴇᴀʀᴄʜ ʜᴇʀᴇ 🔎", url=GRP_LNK)]])
         )
 
 
-@Client.on_message(filters.private & filters.text & filters.incoming & ~filters.regex(r"^/"))
+@Client.on_message(filters.private & filters.text & filters.incoming & ~filters.regex(r"^/") & ~filters.regex(r"(https?://)?(t\.me|telegram\.me|telegram\.dog)/"))
 async def pm_text(bot, message):
     bot_id = bot.me.id
     content = message.text
@@ -84,7 +86,8 @@ async def pm_text(bot, message):
         try:
             await message.react(emoji=random.choice(REACTIONS), big=True)
         except Exception:
-            await message.react(emoji="⚡️", big=True)
+            await message.react(emoji="⚡️")
+            pass
     if content.startswith(("#")):
         return
     try:
@@ -94,22 +97,13 @@ async def pm_text(bot, message):
             await auto_filter(bot, message)
         else:
             await message.reply_text(
-                text=(
-                    f"<b>🙋 ʜᴇʏ {user} 😍 ,\n\n"
-                    "𝒀𝒐𝒖 𝒄𝒂𝒏 𝒔𝒆𝒂𝒓𝒄𝒉 𝒇𝒐𝒓 𝒎𝒐𝒗𝒊𝒆𝒔 𝒐𝒏𝒍𝒚 𝒐𝒏 𝒐𝒖𝒓 𝑴𝒐𝒗𝒊𝒆 𝑮𝒓𝒐𝒖𝒑. 𝒀𝒐𝒖 𝒂𝒓𝒆 𝒏𝒐𝒕 𝒂𝒍𝒍𝒐𝒘𝒆𝒅 𝒕𝒐 𝒔𝒆𝒂𝒓𝒄𝒉 𝒇𝒐𝒓 𝒎𝒐𝒗𝒊𝒆𝒔 𝒐𝒏 𝑫𝒊𝒓𝒆𝒄𝒕 𝑩𝒐𝒕. 𝑷𝒍𝒆𝒂𝒔𝒆 𝒋𝒐𝒊𝒏 𝒐𝒖𝒓 𝒎𝒐𝒗𝒊𝒆 𝒈𝒓𝒐𝒖𝒑 𝒃𝒚 𝒄𝒍𝒊𝒄𝒌𝒊𝒏𝒈 𝒐𝒏 𝒕𝒉𝒆  𝑹𝑬𝑸𝑼𝑬𝑺𝑻 𝑯𝑬𝑹𝑬 𝒃𝒖𝒕𝒕𝒐𝒏 𝒈𝒊𝒗𝒆𝒏 𝒃𝒆𝒍𝒐𝒘 𝒂𝒏𝒅 𝒔𝒆𝒂𝒓𝒄𝒉 𝒚𝒐𝒖𝒓 𝒇𝒂𝒗𝒐𝒓𝒊𝒕𝒆 𝒎𝒐𝒗𝒊𝒆 𝒕𝒉𝒆𝒓𝒆 👇\n\n"
-                    "<blockquote>"
-                    "आप केवल हमारे 𝑴𝒐𝒗𝒊𝒆 𝑮𝒓𝒐𝒖𝒑 पर ही 𝑴𝒐𝒗𝒊𝒆 𝑺𝒆𝒂𝒓𝒄𝒉 कर सकते हो । "
-                    "आपको 𝑫𝒊𝒓𝒆𝒄𝒕 𝑩𝒐𝒕 पर 𝑴𝒐𝒗𝒊𝒆 𝑺𝒆𝒂𝒓𝒄𝒉 करने की 𝑷𝒆𝒓𝒎𝒊𝒔𝒔𝒊𝒐𝒏 नहीं है कृपया नीचे दिए गए 𝑹𝑬𝑸𝑼𝑬𝑺𝑻 𝑯𝑬𝑹𝑬 वाले 𝑩𝒖𝒕𝒕𝒐𝒏 पर क्लिक करके हमारे 𝑴𝒐𝒗𝒊𝒆 𝑮𝒓𝒐𝒖𝒑 को 𝑱𝒐𝒊𝒏 करें और वहां पर अपनी मनपसंद 𝑴𝒐𝒗𝒊𝒆 𝑺𝒆𝒂𝒓𝒄𝒉 सर्च करें ।"
-                    "</blockquote></b>"
-                ), reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📝 ʀᴇǫᴜᴇsᴛ ʜᴇʀᴇ ", url=GRP_LNK)]]))
-            await bot.send_message(chat_id=LOG_CHANNEL,
-                                   text=(
-                                       f"<b>#𝐏𝐌_𝐌𝐒𝐆\n\n"
-                                       f"👤 Nᴀᴍᴇ : {user}\n"
-                                       f"🆔 ID : {user_id}\n"
-                                       f"💬 Mᴇssᴀɢᴇ : {content}</b>"
-                                   )
-                                   )
+                text=script.PM_SEARCH_DISABLED_TXT.format(user),
+                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📝 ʀᴇǫᴜᴇsᴛ ʜᴇʀᴇ ", url=GRP_LNK)]])
+            )
+            await bot.send_message(
+                chat_id=LOG_CHANNEL,
+                text=script.PM_LOG_TXT.format(user, user_id, content)
+            )
     except Exception:
         pass
 
@@ -133,7 +127,7 @@ async def refercall(bot, query):
     except Exception as e:    
         pass
     await query.message.edit_text(
-        text=f'Hay Your refer link:\n\nhttps://t.me/{bot.me.username}?start=reff_{query.from_user.id}\n\nShare this link with your friends, Each time they join,  you will get 10 refferal points and after 100 points you will get 1 month premium subscription.',
+        text=script.REFER_TXT.format(bot.me.username, query.from_user.id),
         reply_markup=reply_markup,
         parse_mode=enums.ParseMode.HTML
     )
@@ -141,6 +135,10 @@ async def refercall(bot, query):
 
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
+    try:
+        await query.answer()
+    except Exception:
+        pass
     ident, req, key, offset = query.data.split("_")
     curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     if int(req) not in [query.from_user.id, 0]:
@@ -324,27 +322,26 @@ async def next_page(bot, query):
                 if query.message.caption:
                     try:
                         await query.message.edit_caption(caption=cap, reply_markup=InlineKeyboardMarkup(btn), parse_mode=enums.ParseMode.HTML)
+                    except (MessageNotModified, MessageIdInvalid):
+                        pass
                     except Exception as e:
                         logger.exception(e)
-                        await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
                 else:
-                    await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+                    try:
+                        await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+                    except (MessageNotModified, MessageIdInvalid):
+                        pass
             else:
                 cap = await get_cap(settings, remaining_seconds, files, query, total, dreamx_title, offset+1)
                 await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-        except Exception as e:
-
-            logger.exception("Failed to send result: %s", e)
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
-        # try:
-        #     await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-        # except MessageNotModified:
-        #     pass
+        except Exception as e:
+            logger.exception("Failed to send result: %s", e)
     else:
         try:
             await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     await query.answer()
 
@@ -526,12 +523,12 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
         cap = await get_cap(settings, remaining_seconds, files, query, total_results, dreamx_title, offset=1)
         try:
             await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     else:
         try:
             await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     await query.answer()
 
@@ -681,12 +678,12 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
         cap = await get_cap(settings, remaining_seconds, files, query, total_results, dreamx_title, offset=1)
         try:
             await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     else:
         try:
             await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     await query.answer()
 
@@ -824,17 +821,17 @@ async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
                 reply_markup=InlineKeyboardMarkup(btn),
                 disable_web_page_preview=True,
             )
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     else:
         try:
             await query.edit_message_reply_markup(InlineKeyboardMarkup(btn))
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     await query.answer()
 
 
-@Client.on_callback_query()
+@Client.on_callback_query(group=10)
 async def cb_handler(client: Client, query: CallbackQuery):
     DreamxData = query.data
     try:
@@ -943,7 +940,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 btn.append([InlineKeyboardButton("♻️ ᴛʀʏ ᴀɢᴀɪɴ ♻️", callback_data=f"checksub#{kk}#{file_id}")])
                 try:
                     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
-                except MessageNotModified:
+                except (MessageNotModified, MessageIdInvalid):
                     pass
                 await query.answer(
                     f"👋 Hello {query.from_user.first_name},\n\n"
@@ -1403,14 +1400,14 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 text=f"•• ʟɪɴᴋ ɢᴇɴᴇʀᴀᴛᴇᴅ ꜰᴏʀ ɪᴅ #{user_id} \n•• ᴜꜱᴇʀɴᴀᴍᴇ : {username} \n\n•• ᖴᎥᒪᗴ Nᗩᗰᗴ : {fileName}",
                 quote=True,
                 disable_web_page_preview=True,
-                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🚀 Fast Download 🚀", url=dreamx_download),  # we download Link
-                                                    InlineKeyboardButton('🖥️ Watch online 🖥️', url=dreamx_stream)]])  # web stream Link
+                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🚀 ꜰᴀꜱᴛ ᴅᴏᴡɴʟᴏᴀᴅ 🚀", url=dreamx_download),  # we download Link
+                                                    InlineKeyboardButton('🖥️ ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ 🖥️', url=dreamx_stream)]])  # web stream Link
             )
             dreamcinezone = await query.edit_message_reply_markup(
                 reply_markup=InlineKeyboardMarkup([
                     [
-                        InlineKeyboardButton("🚀 Download ", url=dreamx_download),
-                        InlineKeyboardButton('🖥️ Watch ', url=dreamx_stream)
+                        InlineKeyboardButton("🚀 ꜰᴀꜱᴛ ᴅᴏᴡɴʟᴏᴀᴅ 🚀", url=dreamx_download),
+                        InlineKeyboardButton('🖥️ ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ 🖥️', url=dreamx_stream)
                     ],
                     [
                         InlineKeyboardButton('📌 ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 📌', url=UPDATE_CHNL_LNK)
@@ -1448,16 +1445,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data == "start":
         buttons = [[
-                    InlineKeyboardButton('✪ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ✪', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+                    InlineKeyboardButton('🔰 ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ 🔰', url=f'http://telegram.me/{temp.U_NAME}?startgroup=true')
                 ],[
-                    InlineKeyboardButton('✧ ɢʀᴏᴜᴘ ✧', url='https://t.me/+AOjcHxBEowBhYTRl'),
-                    InlineKeyboardButton('✧ ᴄʜᴀɴɴᴇɪ ✧', url='https://t.me/MovieHuntZone')
+                    InlineKeyboardButton(' ʜᴇʟᴘ 📢', callback_data='help'),
+                    InlineKeyboardButton(' ᴀʙᴏᴜᴛ 📖', callback_data='about')
                 ],[
-                    InlineKeyboardButton('✧ ʜᴇʟᴘ ✧', callback_data='help'),
-                    InlineKeyboardButton('✧ ᴀʙᴏᴜᴛ ✧', callback_data='about')
-                ],[
-                    InlineKeyboardButton('[ ᴛᴏᴘ sᴇᴀʀᴄʜɪɴɢ ]', callback_data="topsearch"),
-                    InlineKeyboardButton('[ ᴜᴘɢʀᴀᴅᴇ ] ', callback_data="premium_info"),
+                    InlineKeyboardButton('ᴛᴏᴘ sᴇᴀʀᴄʜɪɴɢ ⭐', callback_data="topsearch"),
+                     InlineKeyboardButton('ᴜᴘɢʀᴀᴅᴇ 🎟', callback_data="premium_info"),
                 ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         current_time = datetime.now(pytz.timezone(TIMEZONE))
@@ -1471,10 +1465,14 @@ async def cb_handler(client: Client, query: CallbackQuery):
         else:
             gtxt = "ɢᴏᴏᴅ ɴɪɢʜᴛ 🌑"
         try:
+            try:
+                PIC = f"{random.choice(PICS_URL)}?r={get_random_mix_id()}"
+            except Exception:
+                PIC = random.choice(PICS)
             await client.edit_message_media(
                 query.message.chat.id,
                 query.message.id,
-                InputMediaPhoto(random.choice(PICS))
+                InputMediaPhoto(PIC)
             )
         except Exception as e:
             pass
@@ -1571,7 +1569,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data == "source":
         buttons = [[
-            InlineKeyboardButton('MOVIE HUNT ZONE 📜', url='https://t.me/MovieHuntZone'),
+            InlineKeyboardButton('ᴅʀᴇᴀᴍxʙᴏᴛᴢ 📜', url='https://github.com/DreamXBotz/Auto_Filter_Bot.git'),
             InlineKeyboardButton('⇋ ʙᴀᴄᴋ ⇋', callback_data='about')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
@@ -1619,7 +1617,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data == "buy_info":
         try:
             btn = [[
-                InlineKeyboardButton('', callback_data='star_info'),
+                InlineKeyboardButton('ꜱᴛᴀʀ', callback_data='star_info'),
                 InlineKeyboardButton('ᴜᴘɪ', callback_data='upi_info')
             ],[
                 InlineKeyboardButton('⇋ ʙᴀᴄᴋ ᴛᴏ ᴘʀᴇᴍɪᴜᴍ ⇋', callback_data='premium_info')
@@ -1750,10 +1748,7 @@ async def auto_filter(client, msg, spoll=False):
         except Exception:
             # ignore scheduling errors
             pass
-
-    # initialize to avoid NameError if reply_sticker fails
     m = None
-
     try:
         if not spoll:
             message = msg
@@ -1764,16 +1759,7 @@ async def auto_filter(client, msg, spoll=False):
             if len(message.text) < 100:
                 message_text = message.text or ""
                 search = message_text.lower()
-
-                stick_id = "CAACAgUAAxkBAAERSv1qGDvPEaG2aUw2TTKbKMaQ061MigACERwAAvvuAAFUnK4JlN-_m707BA"
-                keyboard = InlineKeyboardMarkup(
-                    [[InlineKeyboardButton(f'🔎 sᴇᴀʀᴄʜɪɴɢ {search}', callback_data="hiding")]]
-                )
-                try:
-                    m = await message.reply_sticker(sticker=stick_id, reply_markup=keyboard)
-                except Exception as e:
-                    logger.exception("reply_sticker failed: %s", e)
-
+                m = await message.reply_text(script.SEARCHING_TXT.format(search))
                 find = search.split(" ")
                 search = ""
                 removes = ["in", "upload", "series", "full",
@@ -1784,18 +1770,15 @@ async def auto_filter(client, msg, spoll=False):
                     else:
                         search = search + x + " "
                 search = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|bro|bruh|broh|helo|that|find|dubbed|link|venum|iruka|pannunga|pannungga|anuppunga|anupunga|anuppungga|anupungga|film|undo|kitti|kitty|tharu|kittumo|kittum|movie|any(one)|with\ssubtitle(s)?)", "", search, flags=re.IGNORECASE)
-                search = re.sub(r"\s+", " ", search).strip()
                 search = search.replace("-", " ")
-                search = search.replace(":", "")
-
+                search = re.sub(r"[:']", "", search)
+                search = re.sub(r"\s+", " ", search).strip()
                 files, offset, total_results = await get_search_results(message.chat.id, search, offset=0, filter=True)
-
                 settings = await get_settings(message.chat.id)
                 if not files:
                     if settings.get("spell_check"):
                         ai_sts = await m.edit('🤖 ᴘʟᴇᴀꜱᴇ ᴡᴀɪᴛ, ᴀɪ ɪꜱ ᴄʜᴇᴄᴋɪɴɢ ʏᴏᴜʀ ꜱᴘᴇʟʟɪɴɢ...')
                         is_misspelled = await ai_spell_check(chat_id=message.chat.id, wrong_name=search)
-
                         if is_misspelled:
                             await ai_sts.edit(f'✅ Aɪ Sᴜɢɢᴇsᴛᴇᴅ: <code>{is_misspelled}</code>\n🔍 Searching for it...')
                             message.text = is_misspelled
@@ -1815,18 +1798,15 @@ async def auto_filter(client, msg, spoll=False):
             else:
                 return
         else:
-            # spoll branch
             message = msg.message.reply_to_message
             search, files, offset, total_results = spoll
             m = await message.reply_text(f'🔎 sᴇᴀʀᴄʜɪɴɢ {search}', reply_to_message_id=message.id)
             settings = await get_settings(message.chat.id)
             await msg.message.delete()
-
         key = f"{message.chat.id}-{message.id}"
         FRESH[key] = search
         temp.GETALL[key] = files
         temp.SHORT[message.from_user.id] = message.chat.id
-
         if settings.get('button'):
             btn = [
                 [
@@ -1906,18 +1886,15 @@ async def auto_filter(client, msg, spoll=False):
             imdb = await get_posterx(search, file=(files[0]).file_name) if TMDB_POSTER else await get_poster(search, file=(files[0]).file_name)
         else:
             imdb = None
-
         cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
         time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - \
             timedelta(hours=curr_time.hour, minutes=curr_time.minute,
                       seconds=(curr_time.second+(curr_time.microsecond/1000000)))
         remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
-
         TEMPLATE = script.IMDB_TEMPLATE_TXT
         settings = await get_settings(message.chat.id)
         if settings.get('template'):
             TEMPLATE = settings['template']
-
         if imdb:
             cap = TEMPLATE.format(
                 query=search,
@@ -1972,7 +1949,6 @@ async def auto_filter(client, msg, spoll=False):
 
                     for idx, file in enumerate(files, start=1):
                         cap += f"<b>\n{idx}. <a href='https://telegram.me/{temp.U_NAME}?start=file_{message.chat.id}_{file.file_id}'>[{get_size(file.file_size)}] {clean_filename(file.file_name)}\n</a></b>"
-
         sent = None
         try:
             if imdb and imdb.get('poster'):
@@ -2000,7 +1976,6 @@ async def auto_filter(client, msg, spoll=False):
         except Exception as e:
             logger.exception("Failed to send result: %s", e)
             return
-
         try:
             if settings.get('auto_delete'):
                 asyncio.create_task(_schedule_delete(sent, message, DELETE_TIME))
@@ -2011,7 +1986,6 @@ async def auto_filter(client, msg, spoll=False):
                 pass
             asyncio.create_task(_schedule_delete(sent, message, DELETE_TIME))
         return
-
     except Exception as e:
         logger.exception(e)
         return
@@ -2019,7 +1993,9 @@ async def auto_filter(client, msg, spoll=False):
 async def ai_spell_check(chat_id, wrong_name):
     async def search_movie(wrong_name):
         search_results = imdb.search_movie(wrong_name)
-        movie_list = [movie['title'] for movie in search_results]
+        if not search_results or not hasattr(search_results, "titles"):
+            return []
+        movie_list = [movie.title for movie in search_results.titles]
         return movie_list
     movie_list = await search_movie(wrong_name)
     if not movie_list:
@@ -2034,7 +2010,6 @@ async def ai_spell_check(chat_id, wrong_name):
             return movie
         movie_list.remove(movie)
 
-
 async def advantage_spell_chok(client, message):
     mv_id = message.id
     search = message.text
@@ -2046,17 +2021,24 @@ async def advantage_spell_chok(client, message):
     query = query.strip() + " movie"
     try:
         movies = await get_poster(search, bulk=True)
-    except:
-        k = await message.reply(script.I_CUDNT.format(message.from_user.mention))
-        await asyncio.sleep(60)
-        await k.delete()
+    except Exception as e:
+        logger.exception("get_poster failed for query=%s: %s", query, e)
+        try:
+            k = await message.reply(script.I_CUDNT.format(message.from_user.mention))
+            await asyncio.sleep(60)
+            try:
+                await k.delete()
+            except Exception:
+                pass
+        except Exception:
+            pass
         try:
             await message.delete()
-        except:
+        except Exception:
             pass
         return
     if not movies:
-        google = search.replace(" ", "+")
+        google = quote_plus(search)
         button = [[InlineKeyboardButton(
             "🔍 ᴄʜᴇᴄᴋ sᴘᴇʟʟɪɴɢ ᴏɴ ɢᴏᴏɢʟᴇ 🔍", url=f"https://www.google.com/search?q={google}")]]
         k = await message.reply_text(text=script.I_CUDNT.format(search), reply_markup=InlineKeyboardMarkup(button))
@@ -2069,7 +2051,7 @@ async def advantage_spell_chok(client, message):
         return
     user = message.from_user.id if message.from_user else 0
     buttons = [
-        [InlineKeyboardButton(text=movie.get('title'), callback_data=f"spol#{movie.movieID}#{user}")
+        [InlineKeyboardButton(text=movie.title, callback_data=f"spol#{movie.imdb_id}#{user}")
          ] for movie in movies]
 
     buttons.append([InlineKeyboardButton(
@@ -2081,3 +2063,4 @@ async def advantage_spell_chok(client, message):
         await message.delete()
     except:
         pass
+    
