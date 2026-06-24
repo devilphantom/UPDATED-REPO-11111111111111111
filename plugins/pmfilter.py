@@ -1502,7 +1502,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto('https://graph.org/file/99eebf5dbe8a134f548e0.jpg')
         )
         await query.message.edit_text(
-            text=script.DREAMXBOTZ_DONATION.format(query.from_user.mention, QR_CODE, OWNER_UPI_ID),
+            text=script.MOVIE_DONATION.format(query.from_user.mention, QR_CODE, OWNER_UPI_ID),
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )
@@ -1571,7 +1571,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data == "BOT CREATOR":
         buttons = [[
-            InlineKeyboardButton('CREATED BY 📜', url='https://t.me/Phantom_Devil'),
+            InlineKeyboardButton('CREATED BY', url='https://t.me/Phantom_Devil'),
             InlineKeyboardButton('⇋ ʙᴀᴄᴋ ⇋', callback_data='about')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
