@@ -305,25 +305,17 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 @𝐌𝐎𝐕𝐈𝐄 𝐑𝐄𝐐𝐔𝐄𝐒𝐓 𝐆𝐑𝐎𝐔𝐏</a></blockquote></b>"""
     
     MOVIE_UPDATE_NOTIFY_TXT = """
-<blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
+</b><a href={poster_url}>📥</a><a href={imdb_url}>New {tag} Added</a></b>
 
-🫥 <b>{filename} {year}</b> | ⭐ <a href="{imdb_url}">IMDB INFO</a>
+<blockquote>✨ ᴛɪᴛʟᴇ : <code>{filename} {year}</code>
 
-🎭 <b>GENRES</b> : {genres}
-🌐 <b>OTT</b> : {ott}
-
-🎥 <b>QUALITY</b> : {quality}
-
-🔊 <b>AUDIO</b> : {language}
-
-📦 <b>RATING</b> : {rating}
-
+🎭 ɢᴇɴʀᴇs : <b>{genres}</b>
+📺 ᴏᴛᴛ        : <b>{ott}</b>
+🎞 ǫᴜᴀʟɪᴛʏ : <b>{quality}</b>
+🎧 ᴀᴜᴅɪᴏ    : <b>{language}</b>
+🔥 ʀᴀᴛɪɴɢ   : <b>{rating}</b>
 {episodes}
-
-〽️ <b>Powered by - <a href="https://t.me/Phantom_Devil">@Phantom_Devil</a></b>
-
-🕒 <b>{time}</b>
-"""
+</blockquote>
 
 🔍 <b>Sᴇᴀʀᴄʜ →</b> {search_link}
 """
