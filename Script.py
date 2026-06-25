@@ -306,7 +306,7 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 
     
   
-MOVIE_UPDATE_NOTIFY_TXT = """
+       MOVIE_UPDATE_NOTIFY_TXT = """
 <blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
 
 🫥 <b>{filename}</b> | ⭐ <a href="{imdb_url}">IMDB INFO</a>
@@ -325,9 +325,9 @@ MOVIE_UPDATE_NOTIFY_TXT = """
 〽️ <b>Powered by - <a href="https://t.me/Phantom_Devil">@Phantom_Devil</a></b>
 
 🔎 <b>{search_link}</b>
-"""
+    """
 
-    IMDB_TEMPLATE_TXT = """<b><a href={url}>{title} (<a href={url}/releaseinfo>{year}</a>)
+        IMDB_TEMPLATE_TXT = """<b><a href={url}>{title} (<a href={url}/releaseinfo>{year}</a>)
 
 🎭 Genres: {genres}
 📆 Year: <a href={url}/releaseinfo>{year}</a>
