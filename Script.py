@@ -304,27 +304,26 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 </a></blockquote></b><b><blockquote>𝙿𝚘𝚠𝚎𝚛e𝚍 𝙱𝚢 ➥ <a href="https://t.me/+SzLcULYfU8s4OTM1">
 @𝐌𝐎𝐕𝐈𝐄 𝐑𝐄𝐐𝐔𝐄𝐒𝐓 𝐆𝐑𝐎𝐔𝐏</a></blockquote></b>"""
     
-MOVIE_UPDATE_NOTIFY_TXT = """
-<blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
+MOVIE_UPDATE_NOTIFY_TXT = """    
+    <blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
 
-🟡 <b>{filename} {year}</b> ║ ⭐ <a href="{imdb_url}">IMDB INFO</a>
+    🟡 <b>{filename} {year}</b> ║ ⭐ <a href="{imdb_url}">IMDB INFO</a>
 
-🎭 <b>GENRES</b> : {genres}
-🌐 <b>OTT</b> : {ott}
+    🎭 <b>GENRES</b> : {genres}
+    🌐 <b>OTT</b> : {ott}
 
-🎥 <b>QUALITY</b> : {quality}
+    🎥 <b>QUALITY</b> : {quality}
 
-🔊 <b>AUDIO</b> : {language}
+    🔊 <b>AUDIO</b> : {language}
 
-🗂 <b>RATING</b> : {rating}
+    🗂 <b>RATING</b> : {rating}
 
-{episodes}
+    {episodes}
 
-<blockquote>⚡ Powered by - <a href="https://t.me/MovieHuntZone">Movie Hunt Zone</a></blockquote>
+    <blockquote>⚡ Powered by - <a href="https://t.me/MovieHuntZone">Movie Hunt Zone</a></blockquote>
 
-🔎 <b>SEARCH :</b> {search_link}
-"""
-
+    🔎 <b>SEARCH :</b> {search_link}
+    """
 
     IMDB_TEMPLATE_TXT = """<b><a href={url}>{title} (<a href={url}/releaseinfo>{year}</a>)
 
