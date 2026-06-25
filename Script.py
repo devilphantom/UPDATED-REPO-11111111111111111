@@ -305,7 +305,7 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 @𝐌𝐎𝐕𝐈𝐄 𝐑𝐄𝐐𝐔𝐄𝐒𝐓 𝐆𝐑𝐎𝐔𝐏</a></blockquote></b>"""
 
     
-   ```python
+  
 MOVIE_UPDATE_NOTIFY_TXT = """
 <blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
 
@@ -326,7 +326,6 @@ MOVIE_UPDATE_NOTIFY_TXT = """
 
 🔎 <b>{search_link}</b>
 """
-```
 
     IMDB_TEMPLATE_TXT = """<b><a href={url}>{title} (<a href={url}/releaseinfo>{year}</a>)
 
