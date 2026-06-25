@@ -304,7 +304,7 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 </a></blockquote></b><b><blockquote>𝙿𝚘𝚠𝚎𝚛e𝚍 𝙱𝚢 ➥ <a href="https://t.me/+SzLcULYfU8s4OTM1">
 @𝐌𝐎𝐕𝐈𝐄 𝐑𝐄𝐐𝐔𝐄𝐒𝐓 𝐆𝐑𝐎𝐔𝐏</a></blockquote></b>"""
     
-MOVIE_UPDATE_NOTIFY_TXT = """    
+MOVIE_UPDATE_NOTIFY_TXT = """
     <blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
 
     🟡 <b>{filename} {year}</b> ║ ⭐ <a href="{imdb_url}">IMDB INFO</a>
@@ -325,7 +325,7 @@ MOVIE_UPDATE_NOTIFY_TXT = """
     🔎 <b>SEARCH :</b> {search_link}
     """
 
-    IMDB_TEMPLATE_TXT = """<b><a href={url}>{title} (<a href={url}/releaseinfo>{year}</a>)
+    IMDB_TEMPLATE_TXT = """<b><a href={url}>{title}...
 
 🎭 Genres: {genres}
 📆 Year: <a href={url}/releaseinfo>{year}</a>
