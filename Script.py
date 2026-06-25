@@ -305,22 +305,28 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 @𝐌𝐎𝐕𝐈𝐄 𝐑𝐄𝐐𝐔𝐄𝐒𝐓 𝐆𝐑𝐎𝐔𝐏</a></blockquote></b>"""
 
     
-    MOVIE_UPDATE_NOTIFY_TXT = """
-</b><a href={poster_url}>📥</a><a href={imdb_url}>New {tag} Added</a></b>
+   ```python
+MOVIE_UPDATE_NOTIFY_TXT = """
+<blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
 
-<blockquote>✨ ᴛɪᴛʟᴇ : <code>{filename} {year}</code>
+🫥 <b>{filename}</b> | ⭐ <a href="{imdb_url}">IMDB INFO</a>
 
-🎭 ɢᴇɴʀᴇs : <b>{genres}</b>
-📺 ᴏᴛᴛ        : <b>{ott}</b>
-🎞️ ǫᴜᴀʟɪᴛʏ : <b>{quality}</b>
-🎧 ᴀᴜᴅɪᴏ    : <b>{language}</b>
-🔥 ʀᴀᴛɪɴɢ   : <b>{rating}</b>
+🎭 <b>GENRES</b> : {genres}
+🌐 <b>OTT</b> : {ott}
+
+🎥 <b>QUALITY</b> : {quality}
+
+🔊 <b>AUDIO</b> : {language}
+
+📦 <b>RATING</b> : {rating}
+
 {episodes}
-</blockquote>
 
-🔍 <b>Sᴇᴀʀᴄʜ →</b> {search_link}
+〽️ <b>Powered by - <a href="https://t.me/Phantom_Devil">@Phantom_Devil</a></b>
+
+🔎 <b>{search_link}</b>
 """
-
+```
 
     IMDB_TEMPLATE_TXT = """<b><a href={url}>{title} (<a href={url}/releaseinfo>{year}</a>)
 
