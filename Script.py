@@ -307,23 +307,24 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     MOVIE_UPDATE_NOTIFY_TXT = """
     <blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
 
-    🟡 <b>{filename} {year}</b> ║ ⭐ <a href="{imdb_url}">IMDB INFO</a>
+🟡 <b>{filename}</b>
 
-    🎭 <b>GENRES</b> : {genres}
-    🌐 <b>OTT</b> : {ott}
+⭐ <a href="{imdb_url}"><b>IMDB INFO</b></a>
 
-    🎥 <b>QUALITY</b> : {quality}
+🎭 <b>GENRES : {genres}</b>
+🌐 <b>OTT : {ott}</b>
 
-    🔊 <b>AUDIO</b> : {language}
+🎥 <b>QUALITY : {quality}</b>
 
-    🗂 <b>RATING</b> : {rating}
+🔊 <b>AUDIO : {language}</b>
 
-    {episodes}
+🗂 <b>RATING : {rating}</b>
 
-    <blockquote>⚡ Powered by - <a href="https://t.me/MovieHuntZone">Movie Hunt Zone</a></blockquote>
+{episodes}
 
-    🔎 <b>SEARCH :</b> {search_link}
-    """
+<blockquote>⚡ <b>Powered by - <a href="https://t.me/MovieHuntZone">Movie Hunt Zone</a></b></blockquote>
+
+🕒 <b>{time}</b>
 
 
     IMDB_TEMPLATE_TXT = """<b><a href={url}>{title} (<a href={url}/releaseinfo>{year}</a>)
