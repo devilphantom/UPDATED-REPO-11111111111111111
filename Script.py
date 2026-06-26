@@ -305,20 +305,25 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 @𝐌𝐎𝐕𝐈𝐄 𝐑𝐄𝐐𝐔𝐄𝐒𝐓 𝐆𝐑𝐎𝐔𝐏</a></blockquote></b>"""
     
     MOVIE_UPDATE_NOTIFY_TXT = """
-</b><a href={poster_url}>📥</a><a href={imdb_url}>New {tag} Added</a></b>
+    <blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
 
-<blockquote>✨ ᴛɪᴛʟᴇ : <code>{filename} {year}</code>
+    🟡 <b>{filename} {year}</b> ║ ⭐ <a href="{imdb_url}">IMDB INFO</a>
 
-🎭 ɢᴇɴʀᴇs : <b>{genres}</b>
-📺 ᴏᴛᴛ        : <b>{ott}</b>
-🎞 ǫᴜᴀʟɪᴛʏ : <b>{quality}</b>
-🎧 ᴀᴜᴅɪᴏ    : <b>{language}</b>
-🔥 ʀᴀᴛɪɴɢ   : <b>{rating}</b>
-{episodes}
-</blockquote>
+    🎭 <b>GENRES</b> : {genres}
+    🌐 <b>OTT</b> : {ott}
 
-🔍 <b>Sᴇᴀʀᴄʜ →</b> {search_link}
-"""
+    🎥 <b>QUALITY</b> : {quality}
+
+    🔊 <b>AUDIO</b> : {language}
+
+    🗂 <b>RATING</b> : {rating}
+
+    {episodes}
+
+    <blockquote>⚡ Powered by - <a href="https://t.me/MovieHuntZone">Movie Hunt Zone</a></blockquote>
+
+    🔎 <b>SEARCH :</b> {search_link}
+    """
 
 
     IMDB_TEMPLATE_TXT = """<b><a href={url}>{title} (<a href={url}/releaseinfo>{year}</a>)
