@@ -307,7 +307,7 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     MOVIE_UPDATE_NOTIFY_TXT = """
     <blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
 
-    🟡 <b>{filename} {year}</b> ║ ⭐ <a href="{imdb_url}">IMDB INFO</a>
+    🫥 <b>{filename} {year}</b> ║ ⭐ <a href="{imdb_url}">IMDB INFO</a>
 
     🎭 <b>GENRES</b> : {genres}
     🌐 <b>OTT</b> : {ott}
