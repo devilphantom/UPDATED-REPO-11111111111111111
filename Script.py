@@ -309,7 +309,6 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 🎬 <b>{filename}</b>
 
 ⭐ <a href="{imdb_url}">IMDb Information</a>
-
 ━━━━━━━━━━━━━━
 🎭 <b>Genres</b> : {genres}
 🌐 <b>OTT</b> : {ott}
@@ -320,12 +319,10 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 {episodes}
 </blockquote>
 <blockquote>
-⚡ <b>Powered By</b>
-<a href="https://t.me/Phantom_Devil">@Phantom_Devil</a>
+⚡ <b>Powered by - <a href="https://t.me/Phantom_Devil">Movie Hunt Zone</a></b>
 </blockquote>
 <blockquote>
-🔍 <b>Movie Search Group</b>
-{search_link}
+🔎 <b>SEARCH :</b> {search_link}
 </blockquote>
 """
 
