@@ -305,25 +305,23 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 @𝐌𝐎𝐕𝐈𝐄 𝐑𝐄𝐐𝐔𝐄𝐒𝐓 𝐆𝐑𝐎𝐔𝐏</a></blockquote></b>"""
     
     MOVIE_UPDATE_NOTIFY_TXT = """
-<blockquote>
-🎬 <b>{filename}</b>
+<blockquote>📥 <b>NEW FILE ADDED ✅</b></blockquote>
 
-⭐ <a href="{imdb_url}">IMDb Information</a>
-━━━━━━━━━━━━━━
-🎭 <b>Genres</b> : {genres}
-🌐 <b>OTT</b> : {ott}
-📽 <b>Quality</b> : {quality}
-🔊 <b>Audio</b> : {language}
-🎞 <b>Rating</b> : ⭐ {rating}
-━━━━━━━━━━━━━━
-{episodes}
-</blockquote>
+🎬 <b>{filename}</b> | ⭐ <a href="{imdb_url}"><b>IMDb Info</b></a>
+━━━━━━━━━━━━━━━━━━━━━━
+
+🎭 <b>GENRES ➜ {genres}</b>
+🌐 <b>OTT ➜ {ott}</b>
+📀 <b>QUALITY ➜ {quality}</b>
+🔊 <b>AUDIO ➜ {language}</b>
+⭐ <b>RATING ➜ {rating}</b>
+<b>{episodes}</b>
+━━━━━━━━━━━━━━━━━━━━━━
 <blockquote>
-⚡ <b>Powered by - <a href="https://t.me/Phantom_Devil">Movie Hunt Zone</a></b>
+⚡ <b>POWERED BY ➜ <a href="https://t.me/Phantom_Devil">@Phantom_Devil</a></b>
 </blockquote>
-<blockquote>
-🔎 <b>SEARCH :</b> {search_link}
-</blockquote>
+
+🔎 <b>SEARCH ➜ {search_link}</b>
 """
 
 
