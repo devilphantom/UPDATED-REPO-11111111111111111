@@ -317,15 +317,12 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 🔊 <b>Audio</b> : {language}
 🎞 <b>Rating</b> : ⭐ {rating}
 ━━━━━━━━━━━━━━
-
 {episodes}
 </blockquote>
-
 <blockquote>
 ⚡ <b>Powered By</b>
 <a href="https://t.me/Phantom_Devil">@Phantom_Devil</a>
 </blockquote>
-
 <blockquote>
 🔍 <b>Movie Search Group</b>
 {search_link}
