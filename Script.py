@@ -319,11 +319,9 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 
 {episodes}
 </blockquote>
-
 <blockquote>
 ⚡️ <b>POWERED BY - <a href="https://t.me/Phantom_Devil">@Phantom_Devil</a></b>
 </blockquote>
-
 <blockquote>
 🔎 <b>SEARCH :</b> {search_link}
 </blockquote>
