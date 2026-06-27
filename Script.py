@@ -306,24 +306,29 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     
     MOVIE_UPDATE_NOTIFY_TXT = """
 <blockquote>
-🫥 <b>{filename}</b> || ⭐️ <a href="{imdb_url}"><b>IMDB INFO</b></a>
+🎬 <b>{filename}</b>
 
-🎭 <b>GENRES :</b> <b>{genres}</b>
-🌐 <b>OTT :</b> <b>{ott}</b>
+⭐ <a href="{imdb_url}">IMDb Information</a>
 
-🎥 <b>QUALITY :</b> <b>{quality}</b>
-
-🔊 <b>AUDIO :</b> <b>{language}</b>
-
-📦 <b>RATING :</b> <b>{rating}</b>
+━━━━━━━━━━━━━━
+🎭 <b>Genres</b> : {genres}
+🌐 <b>OTT</b> : {ott}
+📽 <b>Quality</b> : {quality}
+🔊 <b>Audio</b> : {language}
+🎞 <b>Rating</b> : ⭐ {rating}
+━━━━━━━━━━━━━━
 
 {episodes}
 </blockquote>
+
 <blockquote>
-⚡️ <b>POWERED BY - <a href="https://t.me/Phantom_Devil">@Phantom_Devil</a></b>
+⚡ <b>Powered By</b>
+<a href="https://t.me/Phantom_Devil">@Phantom_Devil</a>
 </blockquote>
+
 <blockquote>
-🔎 <b>SEARCH :</b> {search_link}
+🔍 <b>Movie Search Group</b>
+{search_link}
 </blockquote>
 """
 
