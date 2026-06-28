@@ -317,9 +317,9 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 ⭐ <b>RATING ➜ {rating}</b>
 {episodes}
 ━━━━━━━━━━━━━━━━━━━━━━
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┏━━━━━━━━━━━━━━━━━━━━━━━━┓
 ⚡ <b>POWERED BY ➜ <a href="https://t.me/MovieHuntZone">Movie Hunt Zone</a></b>
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┗━━━━━━━━━━━━━━━━━━━━━━━━┛
 🔎 <b>SEARCH ➜ {search_link}</b>
 """
 
