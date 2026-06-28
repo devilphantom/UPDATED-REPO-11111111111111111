@@ -315,7 +315,7 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 📀 <b>QUALITY ➜ {quality}</b>
 🔊 <b>AUDIO ➜ {language}</b>
 ⭐ <b>RATING ➜ {rating}</b>
-<b>{episodes}</b>
+{episodes}
 ━━━━━━━━━━━━━━━━━━━━━━
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ⚡ <b>POWERED BY ➜ <a href="https://t.me/MovieHuntZone">Movie Hunt Zone</a></b>
