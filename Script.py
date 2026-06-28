@@ -318,7 +318,7 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 <b>{episodes}</b>
 ━━━━━━━━━━━━━━━━━━━━━━
 <blockquote>
-⚡ <b>POWERED BY ➜ <a href="https://t.me/Phantom_Devil">@Phantom_Devil</a></b>
+⚡ <b>POWERED BY ➜ <a href="https://t.me/MovieHuntZone"><u>Movie Hunt Zone</u></a></b>
 </blockquote>
 
 🔎 <b>SEARCH ➜ {search_link}</b>
