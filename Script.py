@@ -149,6 +149,16 @@ Nᴀᴍᴇ - {}
     DEL_MSG = """⚠️ ᴛʜɪꜱ ᴍᴏᴠɪᴇ ꜰɪʟᴇ/ᴠɪᴅᴇᴏ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ <b><u><code>{}</code></u></b>
 
 <blockquote expandable><b><i>ᴘʟᴇᴀꜱᴇ ꜰᴏʀᴡᴀʀᴅ ᴛʜɪꜱ ꜰɪʟᴇ ᴛᴏ ꜱᴏᴍᴇᴡʜᴇʀᴇ ᴇʟꜱᴇ & ꜱᴛᴀʀᴛ ᴅᴏᴡɴʟᴏᴀᴅɪɴɢ ᴛʜᴇʀᴇ</i></b></blockquote>"""
+    DAILY_LIMIT_TXT = """<b>🚫 Daily Download Limit Reached!</b>
+
+📦 Free users can download only <b>5 files</b> every 24 hours.
+
+💎 Upgrade to Premium and enjoy:
+• ♾ Unlimited Downloads
+• ⚡ Faster Access
+• 🚀 No Daily Limits
+
+⏳ Your free limit will reset automatically after 24 hours."""
 
 
     I_CUDNT = """<b>sᴏʀʀʏ ɴᴏ ꜰɪʟᴇs ᴡᴇʀᴇ ꜰᴏᴜɴᴅ ꜰᴏʀ ʏᴏᴜʀ ʀᴇǫᴜᴇꜱᴛ {} 😕
