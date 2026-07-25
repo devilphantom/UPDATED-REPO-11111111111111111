@@ -341,7 +341,7 @@ class Database:
             elif str(last_date) != now.strftime("%Y-%m-%d"):
                 await self.users.update_one({"id": user_id}, {"$set": {"daily_downloads": 0, "last_download_date": now}})
                 return True
-        return user.get("daily_downloads", 0) < 5
+        return user.get("daily_downloads", 0) < DAILY_DOWNLOAD_LIMIT
 
     async def increase_daily_download(self, user_id):
         now = datetime.datetime.now()
