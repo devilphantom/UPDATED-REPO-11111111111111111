@@ -37,7 +37,7 @@ PICS = (environ.get('PICS', 'https://files.catbox.moe/xaugwv.jpg')).split()  # S
 NOR_IMG = environ.get("NOR_IMG", "https://graph.org/file/e20b5fdaf217252964202.jpg")
 MELCOW_PHOTO = environ.get("MELCOW_PHOTO", "https://graph.org/file/56b5deb73f3b132e2bb73.jpg")
 SPELL_IMG = environ.get("SPELL_IMG", "https://graph.org/file/13702ae26fb05df52667c.jpg")
-SUBSCRIPTION = (environ.get('SUBSCRIPTION', ''))
+SUBSCRIPTION = (environ.get('SUBSCRIPTION', 'https://i.ibb.co/9HCkrZp3/x.jpg'))
 FSUB_PICS = (environ.get('FSUB_PICS', 'https://files.catbox.moe/e52yh3.jpg')).split()  # Fsub pic
 
 # ============================
