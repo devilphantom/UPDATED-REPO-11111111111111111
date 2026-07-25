@@ -312,7 +312,7 @@ class Database:
         myquery = {"user_id": user_id, "hash": hash}
         newvalues = { "$set": value }
         return await self.verify_id.update_one(myquery, newvalues)
-        
+
     async def has_premium_access(self, user_id):
         user_data = await self.get_user(user_id)
         if user_data:
@@ -324,8 +324,35 @@ class Database:
             else:
                 await self.users.update_one({"id": user_id}, {"$set": {"expiry_time": None}})
         return False
-        
-    
+
+    async def check_daily_limit(self, user_id):
+        if await self.has_premium_access(user_id):
+            return True
+        user = await self.users.find_one({"id": user_id})
+        if not user:
+            return True
+        now = datetime.datetime.now()
+        last_date = user.get("last_download_date")
+        if last_date:
+            if isinstance(last_date, datetime.datetime):
+                if (now - last_date).total_seconds() >= 86400:
+                    await self.users.update_one({"id": user_id}, {"$set": {"daily_downloads": 0, "last_download_date": now}})
+                    return True
+            elif str(last_date) != now.strftime("%Y-%m-%d"):
+                await self.users.update_one({"id": user_id}, {"$set": {"daily_downloads": 0, "last_download_date": now}})
+                return True
+        return user.get("daily_downloads", 0) < 5
+
+    async def increase_daily_download(self, user_id):
+        now = datetime.datetime.now()
+        await self.users.update_one(
+            {"id": user_id},
+            {
+                "$inc": {"daily_downloads": 1},
+                "$set": {"last_download_date": now}
+            },
+            upsert=True
+        )
 
     async def update_one(self, filter_query, update_data):
         try:
