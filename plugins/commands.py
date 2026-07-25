@@ -333,11 +333,16 @@ async def start(client, message):
         files_ = await file_details_task
 
         if not await db.check_daily_limit(message.from_user.id):
+            btn = [
+                [InlineKeyboardButton("💎 ᴜᴘɢʀᴀᴅᴇ ᴛᴏ ᴘʀᴇᴍɪᴜᴍ 💎", callback_data="premium_info")],
+                [InlineKeyboardButton("📲 ᴄᴏɴᴛᴀᴄᴛ ᴏᴡɴᴇʀ 📲", url=OWNER_LNK)]
+            ]
             return await message.reply_text(
                 "🚫 <b>Daily download limit reached.</b>\n\n"
                 "📦 <b>Free users can download only 5 files every 24 hours.</b>\n\n"
                 "💎 <b>Upgrade to Premium for unlimited downloads.</b>",
                 quote=True,
+                reply_markup=InlineKeyboardMarkup(btn),
                 parse_mode=enums.ParseMode.HTML
             )
 
@@ -349,6 +354,20 @@ async def start(client, message):
                 filesarr = []
                 cover = None
                 for file in files:
+                    if not await db.check_daily_limit(message.from_user.id):
+                        limit_btn = [
+                            [InlineKeyboardButton("💎 ᴜᴘɢʀᴀᴅᴇ ᴛᴏ ᴘʀᴇᴍɪᴜᴍ 💎", callback_data="premium_info")],
+                            [InlineKeyboardButton("📲 ᴄᴏɴᴛᴀᴄᴛ ᴏᴡɴᴇʀ 📲", url=OWNER_LNK)]
+                        ]
+                        await message.reply_text(
+                            "🚫 <b>Daily download limit reached.</b>\n\n"
+                            "📦 <b>Free users can download only 5 files every 24 hours.</b>\n\n"
+                            "💎 <b>Upgrade to Premium for unlimited downloads.</b>",
+                            quote=True,
+                            reply_markup=InlineKeyboardMarkup(limit_btn),
+                            parse_mode=enums.ParseMode.HTML
+                        )
+                        break
                     file_id = file.file_id
                     files_ = await get_file_details(file_id)
                     files1 = files_[0]
@@ -375,8 +394,8 @@ async def start(client, message):
                         protect_content=settings.get('file_secure', PROTECT_CONTENT),
                         reply_markup=InlineKeyboardMarkup(btn)
                     )
+                    await db.increase_daily_download(message.from_user.id)
                     filesarr.append(msg)
-                await db.increase_daily_download(message.from_user.id)
                 k = await client.send_message(chat_id=message.from_user.id, text=script.DEL_MSG.format(get_time(DELETE_TIME)), parse_mode=enums.ParseMode.HTML)
                 await sticker.delete()
                 await asyncio.sleep(DELETE_TIME)
