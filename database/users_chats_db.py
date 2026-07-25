@@ -326,25 +326,38 @@ class Database:
         return False
 
     async def check_daily_limit(self, user_id):
+        user_id = int(user_id)
         if await self.has_premium_access(user_id):
             return True
         user = await self.users.find_one({"id": user_id})
         if not user:
+            user = await self.users.find_one({"id": str(user_id)})
+        if not user:
             return True
-        now = datetime.datetime.now()
+
+        now = datetime.datetime.utcnow()
         last_date = user.get("last_download_date")
         if last_date:
             if isinstance(last_date, datetime.datetime):
+                if last_date.tzinfo is not None:
+                    last_date = last_date.replace(tzinfo=None)
                 if (now - last_date).total_seconds() >= 86400:
                     await self.users.update_one({"id": user_id}, {"$set": {"daily_downloads": 0, "last_download_date": now}})
                     return True
-            elif str(last_date) != now.strftime("%Y-%m-%d"):
-                await self.users.update_one({"id": user_id}, {"$set": {"daily_downloads": 0, "last_download_date": now}})
-                return True
-        return user.get("daily_downloads", 0) < DAILY_DOWNLOAD_LIMIT
+            else:
+                try:
+                    if str(last_date)[:10] != now.strftime("%Y-%m-%d"):
+                        await self.users.update_one({"id": user_id}, {"$set": {"daily_downloads": 0, "last_download_date": now}})
+                        return True
+                except Exception:
+                    pass
+
+        daily_downloads = user.get("daily_downloads", 0)
+        return daily_downloads < DAILY_DOWNLOAD_LIMIT
 
     async def increase_daily_download(self, user_id):
-        now = datetime.datetime.now()
+        user_id = int(user_id)
+        now = datetime.datetime.utcnow()
         await self.users.update_one(
             {"id": user_id},
             {
