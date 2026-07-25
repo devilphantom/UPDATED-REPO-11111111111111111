@@ -332,6 +332,15 @@ async def start(client, message):
         # Now, await the file details task
         files_ = await file_details_task
 
+        if not await db.check_daily_limit(message.from_user.id):
+            return await message.reply_text(
+                "🚫 <b>Daily download limit reached.</b>\n\n"
+                "📦 <b>Free users can download only 5 files every 24 hours.</b>\n\n"
+                "💎 <b>Upgrade to Premium for unlimited downloads.</b>",
+                quote=True,
+                parse_mode=enums.ParseMode.HTML
+            )
+
         if data.startswith("allfiles"):
             try:
                 files = temp.GETALL.get(file_id)
@@ -367,6 +376,7 @@ async def start(client, message):
                         reply_markup=InlineKeyboardMarkup(btn)
                     )
                     filesarr.append(msg)
+                await db.increase_daily_download(message.from_user.id)
                 k = await client.send_message(chat_id=message.from_user.id, text=script.DEL_MSG.format(get_time(DELETE_TIME)), parse_mode=enums.ParseMode.HTML)
                 await sticker.delete()
                 await asyncio.sleep(DELETE_TIME)
@@ -401,6 +411,7 @@ async def start(client, message):
                     file_id=file_id,
                     protect_content=settings.get('file_secure', PROTECT_CONTENT),
                     reply_markup=InlineKeyboardMarkup(btn))
+                await db.increase_daily_download(message.from_user.id)
 
                 filetype = msg.media
                 file = getattr(msg, filetype.value)
@@ -456,6 +467,7 @@ async def start(client, message):
             protect_content=settings.get('file_secure', PROTECT_CONTENT),
             reply_markup=InlineKeyboardMarkup(btn)
         )
+        await db.increase_daily_download(message.from_user.id)
         
         k = await msg.reply(script.DEL_MSG.format(get_time(DELETE_TIME)),
             quote=True, parse_mode=enums.ParseMode.HTML
