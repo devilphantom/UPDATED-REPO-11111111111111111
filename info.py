@@ -268,7 +268,6 @@ Bot_cmds = {
     "maintenance": "Maintenance Mode (Admin Only)",
 }
 
-
 #Don't Change Anything Here
 if MULTIPLE_DB == False:
     DATABASE_URI = DATABASE_URI
