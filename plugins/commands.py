@@ -130,7 +130,7 @@ async def start(client, message):
             else:
                 gtxt = "ɢᴏᴏᴅ ɴɪɢʜᴛ 🌑"
             try:      
-                PIC = f"{random.choice(PICS_URL)}?r={get_random_mix_id()}"
+                PIC = random.choice(PICS_URL)
             except Exception:
                 PIC = random.choice(PICS)
             await message.reply_photo(
