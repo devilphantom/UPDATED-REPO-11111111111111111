@@ -122,7 +122,7 @@ async def save_file(media):
             file_type=media.file_type,
             mime_type=media.mime_type,
             caption=(media.caption.html if media.caption and INDEX_CAPTION else None),
-            cover=cover_to_use,,
+            cover=cover_to_use,
         )
     except Exception as e:
         logger.exception(f"[ERROR] '{file_name}' → {e}")
