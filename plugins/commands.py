@@ -540,14 +540,17 @@ async def log_file(bot, message):
     except Exception as e:
         await message.reply(str(e))
 
-@Client.on_message(filters.command('save') & filters.user(ADMINS))
+@Client.on_message(filters.command(['save', 'psave']) & filters.user(ADMINS))
 async def save_file_handler(bot, message):
     """Save file to database"""
     reply = message.reply_to_message
     if reply and reply.media:
         msg = await message.reply("Pʀᴏᴄᴇssɪɴɢ...⏳", quote=True)
     else:
-        await message.reply('Rᴇᴘʟʏ ᴛᴏ ғɪʟᴇ ᴡɪᴛʜ /save ᴡʜɪᴄʜ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ sᴀᴠᴇ', quote=True)
+        await message.reply(
+            f"Rᴇᴘʟʏ ᴛᴏ ғɪʟᴇ ᴡɪᴛʜ /{message.command[0]} ᴡʜɪᴄʜ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ sᴀᴠᴇ",
+            quote=True
+        )
         return
 
     try:
@@ -561,6 +564,7 @@ async def save_file_handler(bot, message):
         
         file_id, file_ref = unpack_new_file_id(media.file_id)
         media.file_type = file_type
+        media.premium_only = message.command[0].lower() == "psave"
         media.caption = reply.caption
         success, status = await save_file(media)
         if success:
