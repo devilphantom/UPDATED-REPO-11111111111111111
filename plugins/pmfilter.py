@@ -876,12 +876,59 @@ async def cb_handler(client: Client, query: CallbackQuery):
             else:
                 await query.answer("Tʜᴀᴛ's ɴᴏᴛ ғᴏʀ ʏᴏᴜ!!", show_alert=True)
 
-    if query.data.startswith("file"):
-        ident, file_id = query.data.split("#")
-        user = query.message.reply_to_message.from_user.id if query.message.reply_to_message else query.from_user.id
-        if int(user) != 0 and query.from_user.id != int(user):
-            return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
-        await query.answer(url=f"https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file_id}")
+ if query.data.startswith("file"):
+    ident, file_id = query.data.split("#")
+
+    files = await get_file_details(file_id)
+    if not files:
+        return await query.answer("File not found.", show_alert=True)
+
+    file = files[0]
+
+    if getattr(file, "premium_only", False):
+    is_premium = await db.has_premium_access(query.from_user.id)
+
+    if not is_premium:
+
+        await query.answer(
+            "🔒 This file is Premium Only!",
+            show_alert=True
+        )
+
+        return await query.message.reply_photo(
+            photo=SUBSCRIPTION,
+            caption="""
+🔒 **PREMIUM ONLY**
+
+🎬 This movie is available only for Premium members.
+
+✨ Buy Premium to watch this movie.
+
+✅ Unlimited Downloads
+✅ Premium Movies
+✅ No Daily Limit
+""",
+            reply_markup=InlineKeyboardMarkup([
+                [
+                    InlineKeyboardButton(
+                        "💎 Buy Premium",
+                        callback_data="premium_info"
+                    )
+                ]
+            ])
+        )
+
+    user = query.message.reply_to_message.from_user.id if query.message.reply_to_message else query.from_user.id
+
+    if int(user) != 0 and query.from_user.id != int(user):
+        return await query.answer(
+            script.ALRT_TXT.format(query.from_user.first_name),
+            show_alert=True
+        )
+
+    await query.answer(
+        url=f"https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file_id}"
+    )
 
     elif query.data.startswith("sendfiles"):
         clicked = query.from_user.id
