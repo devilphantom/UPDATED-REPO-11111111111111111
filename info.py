@@ -62,7 +62,7 @@ auth_channels     = environ.get("AUTH_CHANNELS", "100")# Channels for force sub 
 # ============================
 # Payment Configuration
 # ============================
-QR_CODE = environ.get('QR_CODE', 'https://files.catbox.moe/2ircp5.jpg')    # QR code image for payments
+QR_CODE = environ.get('QR_CODE', 'https://i.ibb.co/9HCkrZp3/x.jpg')    # QR code image for payments
 OWNER_UPI_ID = environ.get('OWNER_UPI_ID', 'phantombot@ptaxis')    # Owner UPI ID for payments
 
 # Premium Plans Prices & Links
