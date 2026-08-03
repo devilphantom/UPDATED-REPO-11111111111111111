@@ -65,6 +65,17 @@ auth_channels     = environ.get("AUTH_CHANNELS", "100")# Channels for force sub 
 QR_CODE = environ.get('QR_CODE', 'https://files.catbox.moe/2ircp5.jpg')    # QR code image for payments
 OWNER_UPI_ID = environ.get('OWNER_UPI_ID', 'phantombot@ptaxis')    # Owner UPI ID for payments
 
+# Premium Plans Prices & Links
+PLAN_7_DAYS_PRICE = environ.get('PLAN_7_DAYS_PRICE', '20')
+PLAN_15_DAYS_PRICE = environ.get('PLAN_15_DAYS_PRICE', '40')
+PLAN_30_DAYS_PRICE = environ.get('PLAN_30_DAYS_PRICE', '60')
+PLAN_45_DAYS_PRICE = environ.get('PLAN_45_DAYS_PRICE', '90')
+PLAN_60_DAYS_PRICE = environ.get('PLAN_60_DAYS_PRICE', '120')
+
+PAYMENT_URL = environ.get('PAYMENT_URL', 'https://t.me/Phantom_Devil')
+SUPPORT_USERNAME = environ.get('SUPPORT_USERNAME', 'https://t.me/Phantom_Devil')
+UPI_ID = environ.get('UPI_ID', OWNER_UPI_ID)
+
 STAR_PREMIUM_PLANS = {
     10: "7day",
     20: "15day",    

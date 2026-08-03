@@ -1,4 +1,4 @@
-from utils import get_random_mix_id, get_size, is_subscribed, is_req_subscribed, group_setting_buttons, get_poster, get_posterx, temp, get_settings, save_group_settings, get_cap, imdb, is_check_admin, extract_request_content, log_error, clean_filename, generate_season_variations, clean_search_text, is_premium_movie
+from utils import get_random_mix_id, get_size, is_subscribed, is_req_subscribed, group_setting_buttons, get_poster, get_posterx, temp, get_settings, save_group_settings, get_cap, imdb, is_check_admin, extract_request_content, log_error, clean_filename, generate_season_variations, clean_search_text, is_premium_movie, get_premium_plans_content, get_plan_details_content
 import tracemalloc
 from fuzzywuzzy import process
 from dreamxbotz.util.file_properties import get_name, get_hash
@@ -1645,21 +1645,28 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data == "buy_info":
         try:
-            btn = [[
-                InlineKeyboardButton('ꜱᴛᴀʀ', callback_data='star_info'),
-                InlineKeyboardButton('ᴜᴘɪ', callback_data='upi_info')
-            ],[
-                InlineKeyboardButton('⇋ ʙᴀᴄᴋ ᴛᴏ ᴘʀᴇᴍɪᴜᴍ ⇋', callback_data='premium_info')
-            ]]
-            reply_markup = InlineKeyboardMarkup(btn)
+            caption, reply_markup = get_premium_plans_content()
             await client.edit_message_media(
                 chat_id=query.message.chat.id,
                 message_id=query.message.id,
-                media=InputMediaPhoto(media=SUBSCRIPTION, caption=script.PREMIUM_TEXT, parse_mode=enums.ParseMode.HTML),
+                media=InputMediaPhoto(media=SUBSCRIPTION, caption=caption, parse_mode=enums.ParseMode.HTML),
                 reply_markup=reply_markup
             )
         except Exception as e:
             logging.exception("Exception in 'buy_info' callback")
+
+    elif query.data.startswith("plan_"):
+        try:
+            caption, reply_markup = get_plan_details_content(query.data)
+            if caption and reply_markup:
+                await client.edit_message_media(
+                    chat_id=query.message.chat.id,
+                    message_id=query.message.id,
+                    media=InputMediaPhoto(media=SUBSCRIPTION, caption=caption, parse_mode=enums.ParseMode.HTML),
+                    reply_markup=reply_markup
+                )
+        except Exception as e:
+            logging.exception("Exception in plan callback")
 
     elif query.data == "upi_info":
         try:
