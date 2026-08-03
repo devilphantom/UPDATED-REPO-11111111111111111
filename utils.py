@@ -1132,15 +1132,17 @@ def get_premium_plans_content():
     return caption, InlineKeyboardMarkup(buttons)
 
 
-def generate_upi_link(days: str, amount: str) -> str:
-    note = quote(f"Premium Subscription ({days} Days)")
-    name = quote(UPI_NAME)
+def generate_upi_link(days: Union[int, str], amount: Union[int, str]) -> str:
+    days_str = str(days).zfill(2)
+    note = quote(f"Premium Subscription ({days_str} Days)", safe='()')
+    name = quote(str(UPI_NAME))
     return f"upi://pay?pa={UPI_ID}&pn={name}&am={amount}&cu=INR&tn={note}"
 
 
 def get_plan_details_content(plan_key: str):
     plans_map = {
         "plan_7": ("07", PLAN_7_DAYS_PRICE),
+        "plan_07": ("07", PLAN_7_DAYS_PRICE),
         "plan_15": ("15", PLAN_15_DAYS_PRICE),
         "plan_30": ("30", PLAN_30_DAYS_PRICE),
         "plan_45": ("45", PLAN_45_DAYS_PRICE),
@@ -1152,22 +1154,18 @@ def get_plan_details_content(plan_key: str):
     days, price = plans_map[plan_key]
     caption = (
         f"💎 <b>{days} DAYS PREMIUM</b>\n\n"
+        f"💰 <b>Price : ₹{price}</b>\n\n"
         "━━━━━━━━━━━━━━\n\n"
-        f"<b>Price : ₹{price}</b>\n\n"
-        "<b>Benefits</b>\n\n"
-        "✅ Unlimited Downloads\n\n"
-        "✅ No Daily Limit\n\n"
-        "✅ Access Premium Movies\n\n"
-        "✅ Faster Access\n\n"
-        "✅ Priority Support\n\n"
-        "━━━━━━━━━━━━━━\n\n"
-        "<b>Payment Method</b>\n\n"
-        "<b>UPI ID</b>\n"
+        "<b>UPI ID</b>\n\n"
         f"<code>{UPI_ID}</code>\n\n"
-        "<b>OR</b>\n\n"
-        "<b>Scan QR Code</b>\n\n"
         "━━━━━━━━━━━━━━\n\n"
-        "<i>After payment send screenshot.</i>"
+        "📌 <b>Payment Steps</b>\n\n"
+        "1️⃣ Open any UPI App\n"
+        "(Google Pay / PhonePe / Paytm)\n\n"
+        f"2️⃣ Pay exactly ₹{price} to the UPI ID above.\n\n"
+        "3️⃣ Send payment screenshot.\n\n"
+        "4️⃣ Premium will be activated within a few minutes.\n\n"
+        "━━━━━━━━━━━━━━"
     )
     upi_url = generate_upi_link(days, price)
     buttons = [
