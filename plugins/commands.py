@@ -18,7 +18,7 @@ from pyrogram.errors import FloodWait, UserNotParticipant , ChannelInvalid, Peer
 from database.ia_filterdb import Media, Media2, get_file_details, unpack_new_file_id, get_bad_files, save_file
 from database.users_chats_db import db
 from info import *
-from utils import get_settings, save_group_settings, is_subscribed, is_req_subscribed, get_size, get_shortlink, is_check_admin, temp, get_readable_time, get_time, generate_settings_text, log_error, clean_filename, get_random_mix_id
+from utils import get_settings, save_group_settings, is_subscribed, is_req_subscribed, get_size, get_shortlink, is_check_admin, temp, get_readable_time, get_time, generate_settings_text, log_error, clean_filename, get_random_mix_id, is_premium_movie
 import time
 
 logging.basicConfig(level=logging.ERROR)
@@ -332,6 +332,22 @@ async def start(client, message):
         # Now, await the file details task
         files_ = await file_details_task
 
+        if files_ and is_premium_movie(files_[0].file_name) and not await db.has_premium_access(message.from_user.id):
+            btn = InlineKeyboardMarkup([
+                [InlineKeyboardButton("💎 Buy Premium", callback_data="premium_info")],
+                [InlineKeyboardButton("❌ Close", callback_data="close_data")]
+            ])
+            return await message.reply_photo(
+                photo=SUBSCRIPTION,
+                caption=(
+                    "🔒✨ <b>ᴘʀᴇᴍɪᴜᴍ-ᴏɴʟʏ ᴍᴏᴠɪᴇ!</b> ✨🔒\n\n"
+                    "🎬 ᴛʜɪꜱ ᴍᴏᴠɪᴇ ɪꜱ ʟᴏᴄᴋᴇᴅ ᴀɴᴅ ᴏɴʟʏ ᴀᴠᴀɪʟᴀʙʟᴇ ꜰᴏʀ ᴏᴜʀ 💎 ᴘʀᴇᴍɪᴜᴍ ᴍᴇᴍʙᴇʀꜱ.\n\n"
+                    "🚀 ᴜᴘɢʀᴀᴅᴇ ɴᴏᴡ ᴀɴᴅ ᴇɴᴊᴏʏ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ᴛᴏ ᴀʟʟ ᴘʀᴇᴍɪᴜᴍ ᴍᴏᴠɪᴇꜱ! 👇"
+                ),
+                reply_markup=btn,
+                parse_mode=enums.ParseMode.HTML
+            )
+
         if not await db.check_daily_limit(message.from_user.id):
             btn = [
                 [InlineKeyboardButton("💎 ᴜᴘɢʀᴀᴅᴇ ᴛᴏ ᴘʀᴇᴍɪᴜᴍ 💎", callback_data="premium_info")],
@@ -351,6 +367,21 @@ async def start(client, message):
                 files = temp.GETALL.get(file_id)
                 if not files:
                     return await message.reply('<b><i>ɴᴏ ꜱᴜᴄʜ ꜰɪʟᴇ ᴇxɪꜱᴛꜱ !</b></i>')
+                if any(is_premium_movie(f.file_name) for f in files) and not await db.has_premium_access(message.from_user.id):
+                    btn = InlineKeyboardMarkup([
+                        [InlineKeyboardButton("💎 Buy Premium", callback_data="premium_info")],
+                        [InlineKeyboardButton("❌ Close", callback_data="close_data")]
+                    ])
+                    return await message.reply_photo(
+                        photo=SUBSCRIPTION,
+                        caption=(
+                            "🔒✨ <b>ᴘʀᴇᴍɪᴜᴍ-ᴏɴʟʏ ᴍᴏᴠɪᴇ!</b> ✨🔒\n\n"
+                            "🎬 ᴛʜɪꜱ ᴍᴏᴠɪᴇ ɪꜱ ʟᴏᴄᴋᴇᴅ ᴀɴᴅ ᴏɴʟʏ ᴀᴠᴀɪʟᴀʙʟᴇ ꜰᴏʀ ᴏᴜʀ 💎 ᴘʀᴇᴍɪᴜᴍ ᴍᴇᴍʙᴇʀꜱ.\n\n"
+                            "🚀 ᴜᴘɢʀᴀᴅᴇ ɴᴏᴡ ᴀɴᴅ ᴇɴᴊᴏʏ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ᴛᴏ ᴀʟʟ ᴘʀᴇᴍɪᴜᴍ ᴍᴏᴠɪᴇꜱ! 👇"
+                        ),
+                        reply_markup=btn,
+                        parse_mode=enums.ParseMode.HTML
+                    )
                 filesarr = []
                 cover = None
                 for file in files:

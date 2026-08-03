@@ -1072,3 +1072,27 @@ async def get_cap(settings, remaining_seconds, files, query, total_results, sear
     except Exception as e:
         logging.error(f"Error in get_cap: {e}")
         pass
+
+
+def is_premium_movie(file_name_or_title: str) -> bool:
+    if not file_name_or_title or not PREMIUM_MOVIES:
+        return False
+    
+    clean_name = file_name_or_title.lower().replace('.', ' ').replace('_', ' ').replace('-', ' ')
+    clean_name = re.sub(r'\bs0*(\d+)(?=[e\s\._\-]|\b)', r'season \1', clean_name)
+    
+    for pm in PREMIUM_MOVIES:
+        if not pm or not isinstance(pm, str):
+            continue
+        clean_pm = pm.lower().strip().replace('.', ' ').replace('_', ' ').replace('-', ' ')
+        clean_pm = re.sub(r'\bs0*(\d+)(?=[e\s\._\-]|\b)', r'season \1', clean_pm)
+        
+        if clean_pm in clean_name:
+            return True
+            
+        pm_words = [w for w in clean_pm.split() if w]
+        if pm_words and all(re.search(r'\b' + re.escape(w) + r'\b', clean_name) for w in pm_words):
+            return True
+            
+    return False
+
