@@ -152,10 +152,9 @@ PREMIUM_USER = [int(user) if id_pattern.search(user) else user for user in envir
 # ============================
 # Add movie/series names here that require Premium subscription
 PREMIUM_MOVIES = [
-    "KGF 2",
-    "Pushpa 2",
-    "Wednesday Season 2",
-    "Mirzapur Season 4"
+    "Brand New day",
+    "spider man brand new day",
+    
 ]
 
 
