@@ -1153,25 +1153,39 @@ def get_plan_details_content(plan_key: str):
 
     days, price = plans_map[plan_key]
     caption = (
-        f"💎 <b>{days} DAYS PREMIUM</b>\n\n"
-        f"💰 <b>Price : ₹{price}</b>\n\n"
-        "━━━━━━━━━━━━━━\n\n"
-        "<b>UPI ID</b>\n\n"
+        f"💎 <b>SELECTED PLAN : {days} DAYS</b>\n\n"
+        f"💰 <b>AMOUNT : ₹{price}</b>\n\n"
+        "━━━━━━━━━━━━━━━━━━━━\n\n"
+        "📱 <b>PAYMENT METHOD</b>\n\n"
+        "Scan the QR Code above.\n\n"
+        "OR\n\n"
+        "💳 <b>UPI ID</b>\n\n"
         f"<code>{UPI_ID}</code>\n\n"
-        "━━━━━━━━━━━━━━\n\n"
-        "📌 <b>Payment Steps</b>\n\n"
-        "1️⃣ Open any UPI App\n"
-        "(Google Pay / PhonePe / Paytm)\n\n"
-        f"2️⃣ Pay exactly ₹{price} to the UPI ID above.\n\n"
-        "3️⃣ Send payment screenshot.\n\n"
-        "4️⃣ Premium will be activated within a few minutes.\n\n"
-        "━━━━━━━━━━━━━━"
+        "━━━━━━━━━━━━━━━━━━━━\n\n"
+        "⚠️ <b>IMPORTANT</b>\n\n"
+        f"• Pay exactly ₹{price}.\n\n"
+        "• Send payment screenshot after payment.\n\n"
+        "• Premium will be activated after payment verification.\n\n"
+        "━━━━━━━━━━━━━━━━━━━━"
     )
-    upi_url = generate_upi_link(days, price)
     buttons = [
-        [InlineKeyboardButton("💳 Pay Now", url=upi_url)],
-        [InlineKeyboardButton("📤 Send Payment Screenshot", url=SUPPORT_USERNAME)],
-        [InlineKeyboardButton("⬅ Back", callback_data="buy_info")]
+        [InlineKeyboardButton("✅ I HAVE PAID", callback_data="paid_info")],
+        [InlineKeyboardButton("⬅ BACK", callback_data="buy_info")]
+    ]
+    return caption, InlineKeyboardMarkup(buttons)
+
+
+def get_paid_confirmation_content():
+    support_url = SUPPORT_USERNAME if SUPPORT_USERNAME.startswith(('http://', 'https://')) else f"https://t.me/{SUPPORT_USERNAME.lstrip('@')}"
+    caption = (
+        "✅ <b>PAYMENT SCREENSHOT REQUIRED</b>\n\n"
+        "Please send your payment screenshot in this chat.\n\n"
+        "After verification your Premium Membership will be activated.\n\n"
+        "⏳ <b>Please wait patiently.</b>"
+    )
+    buttons = [
+        [InlineKeyboardButton("📤 SEND PAYMENT SCREENSHOT", url=support_url)],
+        [InlineKeyboardButton("⬅ BACK", callback_data="buy_info")]
     ]
     return caption, InlineKeyboardMarkup(buttons)
 

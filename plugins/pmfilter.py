@@ -1,4 +1,4 @@
-from utils import get_random_mix_id, get_size, is_subscribed, is_req_subscribed, group_setting_buttons, get_poster, get_posterx, temp, get_settings, save_group_settings, get_cap, imdb, is_check_admin, extract_request_content, log_error, clean_filename, generate_season_variations, clean_search_text, is_premium_movie, get_premium_plans_content, get_plan_details_content
+from utils import get_random_mix_id, get_size, is_subscribed, is_req_subscribed, group_setting_buttons, get_poster, get_posterx, temp, get_settings, save_group_settings, get_cap, imdb, is_check_admin, extract_request_content, log_error, clean_filename, generate_season_variations, clean_search_text, is_premium_movie, get_premium_plans_content, get_plan_details_content, get_paid_confirmation_content
 import tracemalloc
 from fuzzywuzzy import process
 from dreamxbotz.util.file_properties import get_name, get_hash
@@ -1664,11 +1664,23 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await client.edit_message_media(
                     chat_id=query.message.chat.id,
                     message_id=query.message.id,
-                    media=InputMediaPhoto(media=SUBSCRIPTION, caption=caption, parse_mode=enums.ParseMode.HTML),
+                    media=InputMediaPhoto(media=QR_CODE, caption=caption, parse_mode=enums.ParseMode.HTML),
                     reply_markup=reply_markup
                 )
         except Exception as e:
             logging.exception("Exception in plan callback")
+
+    elif query.data == "paid_info":
+        try:
+            caption, reply_markup = get_paid_confirmation_content()
+            await client.edit_message_media(
+                chat_id=query.message.chat.id,
+                message_id=query.message.id,
+                media=InputMediaPhoto(media=QR_CODE, caption=caption, parse_mode=enums.ParseMode.HTML),
+                reply_markup=reply_markup
+            )
+        except Exception as e:
+            logging.exception("Exception in 'paid_info' callback")
 
     elif query.data == "upi_info":
         try:
