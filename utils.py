@@ -17,6 +17,7 @@ from bs4 import BeautifulSoup
 import requests
 from shortzy import Shortzy
 
+from urllib.parse import quote
 from plugins.Dreamxfutures.Imdbposter import get_movie_detailsx
 
 logger = logging.getLogger(__name__)
@@ -1131,6 +1132,12 @@ def get_premium_plans_content():
     return caption, InlineKeyboardMarkup(buttons)
 
 
+def generate_upi_link(days: str, amount: str) -> str:
+    note = quote(f"Premium Subscription ({days} Days)")
+    name = quote(UPI_NAME)
+    return f"upi://pay?pa={UPI_ID}&pn={name}&am={amount}&cu=INR&tn={note}"
+
+
 def get_plan_details_content(plan_key: str):
     plans_map = {
         "plan_7": ("07", PLAN_7_DAYS_PRICE),
@@ -1162,7 +1169,9 @@ def get_plan_details_content(plan_key: str):
         "━━━━━━━━━━━━━━\n\n"
         "<i>After payment send screenshot.</i>"
     )
+    upi_url = generate_upi_link(days, price)
     buttons = [
+        [InlineKeyboardButton("💳 Pay Now", url=upi_url)],
         [InlineKeyboardButton("📤 Send Payment Screenshot", url=SUPPORT_USERNAME)],
         [InlineKeyboardButton("⬅ Back", callback_data="buy_info")]
     ]
