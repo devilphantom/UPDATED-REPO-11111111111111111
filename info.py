@@ -75,6 +75,7 @@ PLAN_60_DAYS_PRICE = environ.get('PLAN_60_DAYS_PRICE', '120')
 PAYMENT_URL = environ.get('PAYMENT_URL', 'https://t.me/Phantom_Devil')
 SUPPORT_USERNAME = environ.get('SUPPORT_USERNAME', 'https://t.me/Phantom_Devil')
 UPI_ID = environ.get('UPI_ID', OWNER_UPI_ID)
+PREMIUM_TRIAL_COUNT = int(environ.get('PREMIUM_TRIAL_COUNT', '3'))
 
 STAR_PREMIUM_PLANS = {
     10: "7day",

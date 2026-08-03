@@ -387,6 +387,26 @@ class Database:
             {"id": user_id}, {"$set": {"expiry_time": None}}
         )
 
+    async def get_premium_trial(self, user_id):
+        user_id = int(user_id)
+        user_data = await self.get_user(user_id)
+        if not user_data:
+            return PREMIUM_TRIAL_COUNT
+        return user_data.get("premium_trial_remaining", PREMIUM_TRIAL_COUNT)
+
+    async def reduce_premium_trial(self, user_id):
+        user_id = int(user_id)
+        current = await self.get_premium_trial(user_id)
+        if current > 0:
+            new_count = current - 1
+            await self.users.update_one(
+                {"id": user_id},
+                {"$set": {"premium_trial_remaining": new_count}},
+                upsert=True
+            )
+            return new_count
+        return 0
+
     async def check_trial_status(self, user_id):
         user_data = await self.get_user(user_id)
         if user_data:

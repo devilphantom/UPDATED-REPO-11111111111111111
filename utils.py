@@ -1163,8 +1163,7 @@ def get_plan_details_content(plan_key: str):
         "<i>After payment send screenshot.</i>"
     )
     buttons = [
-        [InlineKeyboardButton("💳 Pay Now", url=PAYMENT_URL)],
-        [InlineKeyboardButton("📤 Send Screenshot", url=SUPPORT_USERNAME)],
+        [InlineKeyboardButton("📤 Send Payment Screenshot", url=SUPPORT_USERNAME)],
         [InlineKeyboardButton("⬅ Back", callback_data="buy_info")]
     ]
     return caption, InlineKeyboardMarkup(buttons)

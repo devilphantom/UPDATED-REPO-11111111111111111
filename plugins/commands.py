@@ -329,28 +329,65 @@ async def start(client, message):
                 print(f"Error In Verification - {e}")
                 pass
 
+        async def check_and_apply_premium_trial(client, message):
+            user_id = message.from_user.id
+            if await db.has_premium_access(user_id):
+                return True
+            trials = await db.get_premium_trial(user_id)
+            if trials <= 0:
+                btn = InlineKeyboardMarkup([
+                    [InlineKeyboardButton("💎 Buy Premium", callback_data="buy_info")],
+                    [InlineKeyboardButton("📤 Send Payment Screenshot", url=SUPPORT_USERNAME)],
+                    [InlineKeyboardButton("❌ Close", callback_data="close_data")]
+                ])
+                await message.reply_photo(
+                    photo=SUBSCRIPTION,
+                    caption=(
+                        "🔒 <b>Premium Movie</b>\n\n"
+                        "Your FREE Premium Trial has ended.\n\n"
+                        "Upgrade to Premium to continue watching Premium Movies."
+                    ),
+                    reply_markup=btn,
+                    parse_mode=enums.ParseMode.HTML
+                )
+                return False
+
+            remaining = await db.reduce_premium_trial(user_id)
+            total_trials = PREMIUM_TRIAL_COUNT
+            if remaining == total_trials - 1:
+                msg = (
+                    "🎉 <b>Welcome!</b>\n\n"
+                    f"Because you're a new user, you've received <b>{total_trials} FREE Premium Movie Trial Downloads</b>.\n\n"
+                    "✅ This download is using one of your free trials.\n\n"
+                    f"🎟 Remaining Premium Trial Downloads:\n<b>{remaining} / {total_trials}</b>\n\n"
+                    "Enjoy your movie! 🍿"
+                )
+            elif remaining > 0:
+                msg = (
+                    "🎁 <b>Free Premium Trial Used!</b>\n\n"
+                    f"Remaining Premium Trial Downloads:\n<b>{remaining} / {total_trials}</b>"
+                )
+            else:
+                msg = (
+                    "⚠️ <b>This is your LAST FREE Premium Trial!</b>\n\n"
+                    f"Remaining Premium Trial Downloads:\n<b>{remaining} / {total_trials}</b>"
+                )
+            try:
+                await message.reply_text(msg, parse_mode=enums.ParseMode.HTML, quote=True)
+            except Exception:
+                pass
+            return True
+
         # Now, await the file details task
         files_ = await file_details_task
 
-        if files_ and is_premium_movie(files_[0].file_name) and not await db.has_premium_access(message.from_user.id):
-            btn = InlineKeyboardMarkup([
-                [InlineKeyboardButton("💎 Buy Premium", callback_data="premium_info")],
-                [InlineKeyboardButton("❌ Close", callback_data="close_data")]
-            ])
-            return await message.reply_photo(
-                photo=SUBSCRIPTION,
-                caption=(
-                    "🔒✨ <b>ᴘʀᴇᴍɪᴜᴍ-ᴏɴʟʏ ᴍᴏᴠɪᴇ!</b> ✨🔒\n\n"
-                    "🎬 ᴛʜɪꜱ ᴍᴏᴠɪᴇ ɪꜱ ʟᴏᴄᴋᴇᴅ ᴀɴᴅ ᴏɴʟʏ ᴀᴠᴀɪʟᴀʙʟᴇ ꜰᴏʀ ᴏᴜʀ 💎 ᴘʀᴇᴍɪᴜᴍ ᴍᴇᴍʙᴇʀꜱ.\n\n"
-                    "🚀 ᴜᴘɢʀᴀᴅᴇ ɴᴏᴡ ᴀɴᴅ ᴇɴᴊᴏʏ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ᴛᴏ ᴀʟʟ ᴘʀᴇᴍɪᴜᴍ ᴍᴏᴠɪᴇꜱ! 👇"
-                ),
-                reply_markup=btn,
-                parse_mode=enums.ParseMode.HTML
-            )
+        if files_ and is_premium_movie(files_[0].file_name):
+            if not await check_and_apply_premium_trial(client, message):
+                return
 
         if not await db.check_daily_limit(message.from_user.id):
             btn = [
-                [InlineKeyboardButton("💎 ᴜᴘɢʀᴀᴅᴇ ᴛᴏ ᴘʀᴇᴍɪᴜᴍ 💎", callback_data="premium_info")],
+                [InlineKeyboardButton("💎 ᴜᴘɢʀᴀᴅE ᴛᴏ ᴘʀᴇᴍɪᴜᴍ 💎", callback_data="premium_info")],
                 [InlineKeyboardButton("📲 ᴄᴏɴᴛᴀᴄᴛ ᴏᴡɴᴇʀ 📲", url=OWNER_LNK)]
             ]
             return await message.reply_text(
@@ -367,21 +404,9 @@ async def start(client, message):
                 files = temp.GETALL.get(file_id)
                 if not files:
                     return await message.reply('<b><i>ɴᴏ ꜱᴜᴄʜ ꜰɪʟᴇ ᴇxɪꜱᴛꜱ !</b></i>')
-                if any(is_premium_movie(f.file_name) for f in files) and not await db.has_premium_access(message.from_user.id):
-                    btn = InlineKeyboardMarkup([
-                        [InlineKeyboardButton("💎 Buy Premium", callback_data="premium_info")],
-                        [InlineKeyboardButton("❌ Close", callback_data="close_data")]
-                    ])
-                    return await message.reply_photo(
-                        photo=SUBSCRIPTION,
-                        caption=(
-                            "🔒✨ <b>ᴘʀᴇᴍɪᴜᴍ-ᴏɴʟʏ ᴍᴏᴠɪᴇ!</b> ✨🔒\n\n"
-                            "🎬 ᴛʜɪꜱ ᴍᴏᴠɪᴇ ɪꜱ ʟᴏᴄᴋᴇᴅ ᴀɴᴅ ᴏɴʟʏ ᴀᴠᴀɪʟᴀʙʟᴇ ꜰᴏʀ ᴏᴜʀ 💎 ᴘʀᴇᴍɪᴜᴍ ᴍᴇᴍʙᴇʀꜱ.\n\n"
-                            "🚀 ᴜᴘɢʀᴀᴅᴇ ɴᴏᴡ ᴀɴᴅ ᴇɴᴊᴏʏ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ᴛᴏ ᴀʟʟ ᴘʀᴇᴍɪᴜᴍ ᴍᴏᴠɪᴇꜱ! 👇"
-                        ),
-                        reply_markup=btn,
-                        parse_mode=enums.ParseMode.HTML
-                    )
+                if any(is_premium_movie(f.file_name) for f in files):
+                    if not await check_and_apply_premium_trial(client, message):
+                        return
                 filesarr = []
                 cover = None
                 for file in files:

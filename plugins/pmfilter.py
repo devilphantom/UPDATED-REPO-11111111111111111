@@ -885,21 +885,23 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if is_premium_movie(file.file_name):
             is_premium = await db.has_premium_access(query.from_user.id)
             if not is_premium:
-                await query.answer("🔒 This movie is Premium Only!", show_alert=True)
-                btn = InlineKeyboardMarkup([
-                    [InlineKeyboardButton("💎 Buy Premium", callback_data="premium_info")],
-                    [InlineKeyboardButton("❌ Close", callback_data="close_data")]
-                ])
-                return await query.message.reply_photo(
-                    photo=SUBSCRIPTION,
-                    caption=(
-                        "🔒✨ <b>ᴘʀᴇᴍɪᴜᴍ-ᴏɴʟʏ ᴍᴏᴠɪᴇ!</b> ✨🔒\n\n"
-                        "🎬 ᴛʜɪꜱ ᴍᴏᴠɪᴇ ɪꜱ ʟᴏᴄᴋᴇᴅ ᴀɴᴅ ᴏɴʟʏ ᴀᴠᴀɪʟᴀʙʟᴇ ꜰᴏʀ ᴏᴜʀ 💎 ᴘʀᴇᴍɪᴜᴍ ᴍᴇᴍʙᴇʀꜱ.\n\n"
-                        "🚀 ᴜᴘɢʀᴀᴅᴇ ɴᴏᴡ ᴀɴᴅ ᴇɴᴊᴏʏ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ᴛᴏ ᴀʟʟ ᴘʀᴇᴍɪᴜᴍ ᴍᴏᴠɪᴇꜱ! 👇"
-                    ),
-                    reply_markup=btn,
-                    parse_mode=enums.ParseMode.HTML
-                )
+                trials = await db.get_premium_trial(query.from_user.id)
+                if trials <= 0:
+                    btn = InlineKeyboardMarkup([
+                        [InlineKeyboardButton("💎 Buy Premium", callback_data="buy_info")],
+                        [InlineKeyboardButton("📤 Send Payment Screenshot", url=SUPPORT_USERNAME)],
+                        [InlineKeyboardButton("❌ Close", callback_data="close_data")]
+                    ])
+                    return await query.message.reply_photo(
+                        photo=SUBSCRIPTION,
+                        caption=(
+                            "🔒 <b>Premium Movie</b>\n\n"
+                            "Your FREE Premium Trial has ended.\n\n"
+                            "Upgrade to Premium to continue watching Premium Movies."
+                        ),
+                        reply_markup=btn,
+                        parse_mode=enums.ParseMode.HTML
+                    )
         user = query.message.reply_to_message.from_user.id if query.message.reply_to_message else query.from_user.id
         if int(user) != 0 and query.from_user.id != int(user):
             return await query.answer(
