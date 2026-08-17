@@ -306,12 +306,12 @@ Nᴀᴍᴇ : {}
 
 Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     
-    CAPTION = """  <a href="https://t.me/+AOjcHxBEowBhYTRl">
+    CAPTION = """  <a href="https://t.me/+jObgUOIBNtNkNWY1">
 <b>{file_name}</b></a
 
-<b><blockquote>𝙿𝚘𝚠𝚎𝚛e𝚍 𝙱𝚢 ➥ <a href="https://t.me/MovieHuntZone">
+<b><blockquote>𝙿𝚘𝚠𝚎𝚛e𝚍 𝙱𝚢 ➥ <a href="https://t.me/+0SRTp24RXZg3ODY9">
 𝐔𝐏𝐃𝐀𝐓𝐄 CHANNEL
-</a></blockquote></b><b><blockquote>𝙿𝚘𝚠𝚎𝚛e𝚍 𝙱𝚢 ➥ <a href="https://t.me/+SzLcULYfU8s4OTM1">
+</a></blockquote></b><b><blockquote>𝙿𝚘𝚠𝚎𝚛e𝚍 𝙱𝚢 ➥ <a href="https://t.me/+jHwqXCjrwgU4ZTI1">
 @𝐌𝐎𝐕𝐈𝐄 𝐑𝐄𝐐𝐔𝐄𝐒𝐓 𝐆𝐑𝐎𝐔𝐏</a></blockquote></b>"""
     
     MOVIE_UPDATE_NOTIFY_TXT = """
@@ -328,7 +328,7 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 {episodes}
 ━━━━━━━━━━━━━━━━━━━━━━
 ┏━━━━━━━━━━━━━━━━━━━━━━━━┓
-⚡ <b>POWERED BY ➜ <a href="https://t.me/MovieHuntZone">Movie Hunt Zone</a></b>
+⚡ <b>POWERED BY ➜ <a href="https://t.me/+0SRTp24RXZg3ODY9">Movie Hunt Zone</a></b>
 ┗━━━━━━━━━━━━━━━━━━━━━━━━┛
 🔎 <b>SEARCH ➜ {search_link}</b>
 """
@@ -490,7 +490,7 @@ sʜᴏᴡɴ ɪɴ : {remaining_seconds} <i>sᴇᴄ</i>⚡️
     SOURCE_TXT ="""<b>ՏOᑌᖇᑕᗴ ᑕOᗪᗴ : 👇 </b>
 
 This Is An Open-Source Project. You Can Use It Freely, But Selling The Source Code Is Strictly Prohibited.\n
-ꜱᴏᴜʀᴄᴇ ᴄᴏᴅᴇ ʜᴇʀᴇ ◉› :<a href=https://t.me/Phantom_Devil>devil</a>\n """
+Bot Created by ◉› :<a href=https://t.me/Phantom_Devil>devil</a>\n """
 
     SETTING_TXT = """    
 <u>ꜱᴇᴛᴛɪɴɢꜱ</u> :
